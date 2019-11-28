@@ -17,8 +17,8 @@ public class Client {
 	private Properties configProp = new Properties();
 
 	public static void main(String[] args){
-		String port;
-		String db;
+		String port=null;
+		String db=null;
 		Scanner sc = null;
 
 		try{
@@ -26,7 +26,7 @@ public class Client {
 			Properties configProp = new Properties();
 			sc = new Scanner(System.in);
 			String config = sc.nextLine();
-			System.out.println("Reading config file...")
+			System.out.println("Reading config file...");
 
 			configProp.load(new FileInputStream(config));
 			configProp.list(System.out);
@@ -43,8 +43,8 @@ public class Client {
 			System.out.println("Connected!");
 
 			db = configProp.getProperty("DBConnection");
-			username = config.getProperty("DBUsername");
-			password = config.getProperty("DBPassword");
+			String username = configProp.getProperty("DBUsername");
+			String password = configProp.getProperty("DBPassword");
 			System.out.print("Trying to connect to server..." + db);
 			//Implement connect to DB method
 			if(true){
