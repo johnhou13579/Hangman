@@ -1,11 +1,7 @@
 
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Vector;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
+import java.net.*;
+import java.io.*;
 
 public class Server {
 	// to do --> data structure to hold server threads s
@@ -14,7 +10,7 @@ public class Server {
 	//read Config.txt file and storing into Property Class
 	private Properties configProp = new Properties();
 
-	ServerSocket ss = null; 
+	ServerSocket serverSocket = null; 
 	Scanner sc = null;
 	String config = null;
 
@@ -29,22 +25,46 @@ public class Server {
 			configProp.load(new FileInputStream(config));
 			configProp.list(System.out);
 
-			ss = new ServerSocket(Integer.parseInt(configProp.getProperty("ServerPort")));
-
-			sc.close();
+			serverSocket = new ServerSocket(Integer.parseInt(configProp.getProperty("ServerPort")));
 
 			clientList = new Vector<Client>();
-			while (clientList.size() <= 4) {
-				Socket s = ss.accept(); // blocking
+			while (true) {
+				Socket s = serverSocket.accept(); // blocking
 				System.out.println("connected");
+
+				//logic to put into room or create room
+
+				Client client = new Client(s);
+				client.start();
 				//Client st = new Client(s);
 				//clientList.add(st); 
 
 			}
 		} catch (IOException ioe) {
-			System.out.println("ioe in ChatRoom constructor: " + ioe.getMessage());
-			
+			System.out.println("Configuration file " + config +"could not be found.");
 		}		
+	}
+
+	class Client extends Thread{
+		Socket socket;
+		Client(Socket socket){
+			this.socket = socket;
+		}
+
+		public void run(){
+			try{
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+				String inputLine;
+				while((inputLine = in.readLine())!=null){
+					System.out.println(inputLine);
+					out.println(inputLine+" ECHO");
+				}
+			}catch(IOException io){
+
+			}
+		}
 	}
 	
 	public static void main(String [] args) {
