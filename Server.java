@@ -18,6 +18,7 @@ public class Server {
 	Scanner sc = null;
 	String config = null;
 
+
 	public Server() {
 		// to do --> implement your constructor
 		

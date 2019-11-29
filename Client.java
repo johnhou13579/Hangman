@@ -21,6 +21,26 @@ public class Client {
 		String db=null;
 		Scanner sc = null;
 
+		connectToServer();
+
+			System.out.print("Username: ");
+			String inputUser = sc.nextLine();
+			System.out.print("Password: ");
+			String inputPassword = sc.nextLine();
+
+			//Check if exists in DB 
+			if(true){
+				System.out.println("Great! You are now logged in as "+inputUser+". "+inputUser+"'s Record'");
+				System.out.println("--------------");
+				//Get wins and losses here
+				System.out.println("Wins - " + "1");
+				System.out.println("Losses - " + "0");
+			}else{
+				//Make sure error stops running the rest of code.
+			}
+	}
+
+	public static void connectToServer(){
 		try{
 			System.out.println("Enter name of configuration file.");
 			Properties configProp = new Properties();
@@ -45,30 +65,13 @@ public class Client {
 			db = configProp.getProperty("DBConnection");
 			String username = configProp.getProperty("DBUsername");
 			String password = configProp.getProperty("DBPassword");
-			System.out.print("Trying to connect to server..." + db);
+			System.out.print("Trying to connect to database... " + db);
 			//Implement connect to DB method
 			if(true){
 				System.out.println("Connected!");
 			}else{
-				System.out.println("Unable to connec to database "+ db +" with username "+ username+" and password "+ password);
+				System.out.println("Unable to connect to database "+ db +" with username "+ username+" and password "+ password);
 			}
-
-			System.out.print("Username: ");
-			String inputUser = sc.nextLine();
-			System.out.print("Password: ");
-			String inputPassword = sc.nextLine();
-
-			//Check if exists in DB 
-			if(true){
-				System.out.println("Great! You are now logged in as "+inputUser+". "+inputUser+"'s Record'");
-				System.out.println("--------------");
-				//Get wins and losses here
-				System.out.println("Wins - " + "1");
-				System.out.println("Losses - " + "0");
-			}else{
-				//Make sure error stops running the rest of code.
-			}
-			
 		}catch(ConnectException e){
 			System.err.println("Unable to connect to server localhost on port "+port);
 			System.exit(1);
@@ -76,7 +79,6 @@ public class Client {
 			System.err.println("Dont know input file");
 			System.exit(1);
 		}
-		
 	}
 	
 	
