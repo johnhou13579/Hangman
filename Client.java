@@ -6,81 +6,33 @@ import java.util.Properties;
 import java.util.Scanner;
 
 public class Client {
-	// to do --> private variables for the server thread 
-	private Server svr; 
-	//private ObjectOutputStream oos;
-	//private ObjectInputStream ois; 
-	private BufferedReader br;
-	private PrintStream out;
-	public Socket s;
-
-	private Properties configProp = new Properties();
 
 	public static void main(String[] args){
-		String port=null;
-		String db=null;
-		Scanner sc = null;
-
-		connectToServer();
-
-			System.out.print("Username: ");
-			String inputUser = sc.nextLine();
-			System.out.print("Password: ");
-			String inputPassword = sc.nextLine();
-
-			//Check if exists in DB 
-			if(true){
-				System.out.println("Great! You are now logged in as "+inputUser+". "+inputUser+"'s Record'");
-				System.out.println("--------------");
-				//Get wins and losses here
-				System.out.println("Wins - " + "1");
-				System.out.println("Losses - " + "0");
-			}else{
-				//Make sure error stops running the rest of code.
-			}
-	}
-
-	public static void connectToServer(){
+		System.out.println("Enter name of configuration file.");
+		Properties configProp = new Properties();
+		Scanner sc = new Scanner(System.in);
+		String config = sc.nextLine();
+		System.out.println("Reading config file...");
+		
+		
 		try{
-			System.out.println("Enter name of configuration file.");
-			Properties configProp = new Properties();
-			sc = new Scanner(System.in);
-			String config = sc.nextLine();
-			System.out.println("Reading config file...");
-
 			configProp.load(new FileInputStream(config));
 			configProp.list(System.out);
 			System.out.print("Trying to connect to server...");
 
+			Socket socket = new Socket(configProp.getProperty("ServerHostName"), Integer.parseInt(configProp.getProperty("ServerPort")));
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			BufferedReader in = new BufferedReader((new InputStreamReader(socket.getInputStream())));
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-			String userInput;
-
-			/* while((userInput = stdIn.readLine()) != null){
-				System.out.println(userInput);
-			} */
-			port = configProp.getProperty("ServerPort");
-			Socket clientSocket = new Socket("localhost", Integer.parseInt(port));
-			System.out.println("Connected!");
-
-			db = configProp.getProperty("DBConnection");
-			String username = configProp.getProperty("DBUsername");
-			String password = configProp.getProperty("DBPassword");
-			System.out.print("Trying to connect to database... " + db);
-			//Implement connect to DB method
-			if(true){
-				System.out.println("Connected!");
-			}else{
-				System.out.println("Unable to connect to database "+ db +" with username "+ username+" and password "+ password);
+			
+			String serverInput;
+			while((serverInput = stdIn.readLine())!= null){
+				out.println(serverInput);
 			}
-		}catch(ConnectException e){
-			System.err.println("Unable to connect to server localhost on port "+port);
-			System.exit(1);
+			
 		}catch(IOException e){
-			System.err.println("Dont know input file");
-			System.exit(1);
+			System.out.println("Configuration file "+config+" could not be found.");
 		}
-	}
-	
-	
-	
+		
+	}	
 }
