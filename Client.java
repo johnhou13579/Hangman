@@ -20,14 +20,19 @@ public class Client {
 			configProp.list(System.out);
 			System.out.print("Trying to connect to server...");
 
-			Socket socket = new Socket(configProp.getProperty("ServerHostName"), Integer.parseInt(configProp.getProperty("ServerPort")));
+			Socket socket = new Socket(configProp.getProperty("ServerHostname"), Integer.parseInt(configProp.getProperty("ServerPort")));
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			BufferedReader in = new BufferedReader((new InputStreamReader(socket.getInputStream())));
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
-			String serverInput;
-			while((serverInput = stdIn.readLine())!= null){
+			String serverInput=null;
+
+			System.out.println("Connected!");
+			System.out.print(in.readLine());
+
+			while((serverInput=stdIn.readLine())!=null){
 				out.println(serverInput);
+				System.out.print(in.readLine());
 			}
 			
 		}catch(IOException e){

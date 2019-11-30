@@ -30,7 +30,6 @@ public class Server {
 			clientList = new Vector<Client>();
 			while (true) {
 				Socket s = serverSocket.accept(); // blocking
-				System.out.println("connected");
 
 				//logic to put into room or create room
 
@@ -57,10 +56,13 @@ public class Server {
 				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
 				String inputLine;
-				while((inputLine = in.readLine())!=null){
-					System.out.println(inputLine);
-					out.println(inputLine+" ECHO");
-				}
+				out.println("Username: ");
+				String username = in.readLine();
+				out.println("Password: ");
+				String password = in.readLine();
+
+				out.println("Account is "+username+" with password "+password);
+				
 			}catch(IOException io){
 
 			}
